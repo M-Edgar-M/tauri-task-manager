@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-import { tasks, loadTasks, createTask, removeTask } from "$lib/stores/tasks";
+  import { onMount } from 'svelte';
+  import { tasks, loadTasks, createTask, removeTask } from '$lib/stores/tasks';
 
-  let title = "";
+  let title = '';
 
   onMount(loadTasks);
 </script>
@@ -13,9 +13,9 @@ import { tasks, loadTasks, createTask, removeTask } from "$lib/stores/tasks";
   placeholder="New task"
   bind:value={title}
   on:keydown={(e) => {
-    if (e.key === "Enter" && title) {
+    if (e.key === 'Enter' && title) {
       createTask(title);
-      title = "";
+      title = '';
     }
   }}
 />

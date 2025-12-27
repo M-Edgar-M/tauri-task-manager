@@ -1,7 +1,7 @@
-import { invoke } from "@tauri-apps/api/core";
+import { invoke } from '@tauri-apps/api/core';
 
-export type TaskPriority = "Low" | "Medium" | "High";
-export type TaskStatus = "Todo" | "InProgress" | "Done";
+export type TaskPriority = 'Low' | 'Medium' | 'High';
+export type TaskStatus = 'Todo' | 'InProgress' | 'Done';
 
 export interface Task {
   id: string;
@@ -19,20 +19,41 @@ export function addTask(
   priority: TaskPriority,
   dueAt?: number
 ): Promise<Task> {
-  return invoke("add_task", {
-    title,
-    description,
-    priority,
-    dueAt,
-  });
+  try {
+    return invoke('add_task', {
+      title,
+      description,
+      priority,
+      dueAt,
+    });
+  } catch (err) {
+    throw err;
+  }
 }
 
 export function listTasks(): Promise<Task[]> {
-  return invoke("list_tasks");
+  return invoke('list_tasks');
 }
 
 export function deleteTask(id: string): Promise<boolean> {
-  return invoke("delete_task", { id });
+  return invoke('delete_task', { id });
 }
 
+export async function updateTaskStatus(taskId: string, status: TaskStatus): Promise<Task> {
+  return await invoke('update_task_status', {
+    taskId,
+    status,
+  });
+}
 
+export async function updateTask(
+  id: string,
+  title?: string,
+  description?: string | null
+): Promise<Task> {
+  return await invoke('update_task', {
+    id,
+    title,
+    description,
+  });
+}
