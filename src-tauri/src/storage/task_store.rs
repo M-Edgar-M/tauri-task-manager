@@ -72,7 +72,7 @@ pub fn update_task(&self, id: Uuid, title: Option<Stirng>,  description: Option<
     task.update_task(title, description)?;
     self.repo.save(&tasks)?;
 
-    Ok(task.clone))
+    Ok(task.clone())
 }
 
 
