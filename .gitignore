@@ -32,3 +32,6 @@ coverage
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Obsidian
+docs/.obsidian

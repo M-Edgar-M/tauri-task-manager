@@ -1,42 +1,57 @@
 use crate::domain::task::{Task, TaskPriority, TaskStatus};
+use crate::error::TaskError;
 use crate::storage::task_store::TaskStore;
+use std::sync::Mutex;
 use std::time::SystemTime;
 use tauri::State;
-use crate::error::TaskError;
 use uuid::Uuid;
 
 #[tauri::command]
 pub fn add_task(
-    store: State<TaskStore>,
+    store: State<Mutex<TaskStore>>,
     title: String,
-    description: String,
+    description: Option<String>,
     priority: TaskPriority,
     due_at: Option<SystemTime>,
 ) -> Result<Task, TaskError> {
-    let task = Task::new(title, Some(description), priority, due_at)?;
-    println!("Adding task: {:?}", task);
-    store.add(task.clone());
+    let task = Task::new(title, description, priority, due_at)?;
+    let store = store.lock().unwrap();
+    store.add(task.clone())?;
     Ok(task)
 }
 
 #[tauri::command]
-pub fn list_tasks(store: State<TaskStore>) -> Vec<Task> {
-    store.list()
+pub fn list_tasks(store: State<Mutex<TaskStore>>) -> Result<Vec<Task>, TaskError> {
+    let store = store.lock().unwrap();
+    Ok(store.list())
 }
 
 #[tauri::command]
-pub fn delete_task(store: State<TaskStore>, id: String) -> bool {
-    let uuid = id.parse().expect("Invalid UUID");
+pub fn delete_task(store: State<Mutex<TaskStore>>, id: String) -> Result<bool, TaskError> {
+    let uuid = id.parse().map_err(|_| TaskError::InvalidUuid)?;
+    let store = store.lock().unwrap();
     store.delete(uuid)
 }
 
-pub fn update_task_status(store: State<TaskStore>, task_id: Uuid, status: TaskStatus) -> Result<Task, TaskError> {
-    store.update_status(task_id, status)
+#[tauri::command]
+pub fn update_task_status(
+    store: State<Mutex<TaskStore>>,
+    task_id: String,
+    status: TaskStatus,
+) -> Result<Task, TaskError> {
+    let uuid = task_id.parse().map_err(|_| TaskError::InvalidUuid)?;
+    let store = store.lock().unwrap();
+    store.update_status(uuid, status)
 }
 
-
-
 #[tauri::command]
-pub fn update_task(store: State<TaskStore>, id: Uuid, title: Option<String>, description: Option<Option<String>>) -> Result<Task, TaskError> {
-    store.update_task(id, title, desciption)
+pub fn update_task(
+    store: State<Mutex<TaskStore>>,
+    id: String,
+    title: Option<String>,
+    description: Option<Option<String>>,
+) -> Result<Task, TaskError> {
+    let uuid = id.parse().map_err(|_| TaskError::InvalidUuid)?;
+    let store = store.lock().unwrap();
+    store.update(uuid, title, description)
 }

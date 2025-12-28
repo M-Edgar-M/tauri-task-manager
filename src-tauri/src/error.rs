@@ -11,7 +11,13 @@ pub enum TaskError {
 
     #[error("Task not found")]
     NotFound,
-    NoFieldsToUpdate,
-    Persistence,
-}
 
+    #[error("No fields to update")]
+    NoFieldsToUpdate,
+
+    #[error("An error occurred during persistence")]
+    Persistence,
+
+    #[error("Invalid UUID")]
+    InvalidUuid,
+}

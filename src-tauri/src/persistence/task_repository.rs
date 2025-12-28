@@ -1,8 +1,7 @@
 use std::path::PathBuf;
-use crate::domain::Task;
 use std::fs;
-use crate::error:TaskError;
-
+use crate::error::TaskError;
+use crate::domain::task::{Task, TaskStatus};
 
 #[derive(Debug)]
 pub struct TaskRepository {
@@ -26,7 +25,7 @@ impl TaskRepository {
         Ok(())
     }
 
-    pub fn load(&self) -> Result<Vec<Task>>, TaskError> {
+    pub fn load(&self) -> Result<Vec<Task>, TaskError> {
         if !self.file_path.exists() {
             return Ok(Vec::new());
         }

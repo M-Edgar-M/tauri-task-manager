@@ -4,14 +4,14 @@
 
 Goal: real task management + Rust validation.
 
-- [ ] Add Rust-side validation
-  - [ ] Empty title check
-  - [ ] Max title length
-  - [ ] Return structured errors
-- [ ] Update task status (Todo / InProgress / Done)
-- [ ] Update task priority
-- [ ] Edit task title & description
-- [ ] Improve Svelte UI structure (components)
+- [x] Add Rust-side validation
+  - [x] Empty title check
+  - [x] Max title length
+  - [x] Return structured errors
+- [x] Update task status (Todo / InProgress / Done)
+- [x] Update task priority
+- [x] Edit task title & description
+- [x] Improve Svelte UI structure (components)
 
 Learning focus:
 

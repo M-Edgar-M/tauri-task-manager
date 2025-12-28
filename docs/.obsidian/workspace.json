@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "rust/task-domain.model.md",
+                "file": "tasks/03-roadmap.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "task-domain.model"
+              "title": "03-roadmap"
             }
           }
         ]
@@ -185,9 +185,14 @@
   },
   "active": "edd3eca88e287e4d",
   "lastOpenFiles": [
+    "tasks/02-roadmap.md",
+    "tasks/01-roadmap.md",
+    "tasks/03-roadmap.md",
+    "tasks/04-roadmap.md",
+    "tasks/00-roadmap.md",
+    "bugs/mutex-mistakes.md",
     "rust/task-domain.model.md",
     "rust/_template.md",
-    "tasks/00-roadmap.md",
     "decisions/0001-no-wasm-in-mvp.md",
     "2025-12-19.md",
     "decisions/Goals.md"
