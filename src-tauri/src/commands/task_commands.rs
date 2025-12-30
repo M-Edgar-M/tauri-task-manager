@@ -8,14 +8,13 @@ use uuid::Uuid;
 
 #[tauri::command]
 pub fn add_task(
-    store: State<Mutex<TaskStore>>,
+    store: State<TaskStore>,
     title: String,
     description: Option<String>,
     priority: TaskPriority,
     due_at: Option<SystemTime>,
 ) -> Result<Task, TaskError> {
     let task = Task::new(title, description, priority, due_at)?;
-    let store = store.lock().unwrap();
     store.add(task.clone())?;
     Ok(task)
 }
