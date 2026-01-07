@@ -1,6 +1,8 @@
 use serde::Serialize;
 use thiserror::Error;
 
+use crate::domain::task::TaskStatus;
+
 #[derive(Debug, Error, Serialize)]
 pub enum TaskError {
     #[error("Title cannot be empty")]
@@ -20,4 +22,7 @@ pub enum TaskError {
 
     #[error("Invalid UUID")]
     InvalidUuid,
+
+    #[error("Invalid status transition from {from} to {to}")]
+    InvalidStatusTransition { from: TaskStatus, to: TaskStatus },
 }

@@ -1,6 +1,6 @@
 use crate::error::TaskError;
 use serde::{Deserialize, Serialize};
-use std::time::SystemTime;
+use std::{fmt, time::SystemTime};
 use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
@@ -25,6 +25,17 @@ pub struct Task {
     pub priority: TaskPriority,
     pub created_at: SystemTime,
     pub due_at: Option<SystemTime>,
+}
+
+impl fmt::Display for TaskStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            TaskStatus::Todo => "Todo",
+            TaskStatus::InProgress => "InProgress",
+            TaskStatus::Done => "Done",
+        };
+        write!(f, "{s}")
+    }
 }
 
 impl Task {
@@ -54,10 +65,6 @@ impl Task {
         })
     }
 
-    pub fn update_status(&mut self, status: TaskStatus) {
-        self.status = status;
-    }
-
     pub fn update(
         &mut self,
         title: Option<String>,
@@ -81,6 +88,25 @@ impl Task {
             self.title = title;
         }
 
+        Ok(())
+    }
+
+    pub fn can_transition_to(&self, next: TaskStatus) -> bool {
+        matches!(
+            (&self.status, &next),
+            (TaskStatus::Todo, TaskStatus::InProgress) | (TaskStatus::InProgress, TaskStatus::Done)
+        )
+    }
+
+    pub fn update_status(&mut self, next: TaskStatus) -> Result<(), TaskError> {
+        if !self.can_transition_to(next.clone()) {
+            return Err(TaskError::InvalidStatusTransition {
+                from: self.status.clone(),
+                to: next,
+            });
+        }
+
+        self.status = next;
         Ok(())
     }
 }

@@ -47,18 +47,19 @@ impl TaskStore {
     pub fn update_status(&self, id: Uuid, status: TaskStatus) -> Result<Task, TaskError> {
         let mut tasks = self.tasks.lock().unwrap();
 
-        let task = {
+        let updated_task = {
             let task = tasks
                 .iter_mut()
                 .find(|t| t.id == id)
                 .ok_or(TaskError::NotFound)?;
 
-            task.update_status(status);
+            task.update_status(status)?;
             task.clone()
         };
+
         self.repo.save(&tasks)?;
 
-        Ok(task)
+        Ok(updated_task)
     }
 
     pub fn update(
